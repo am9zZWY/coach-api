@@ -59,7 +59,7 @@ public class MailServiceProducer {
                     });
 
         } catch (Exception e) {
-            log.error("Error processing received email", e);
+            log.error("Error processing received email");
         }
     }
 }
