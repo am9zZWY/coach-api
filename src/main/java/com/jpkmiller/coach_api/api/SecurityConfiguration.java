@@ -18,6 +18,7 @@ package com.jpkmiller.coach_api.api;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
@@ -39,25 +40,21 @@ public class SecurityConfiguration {
 
 	@Bean
 	SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
-		// @formatter:off
 		http
-			.authorizeExchange((authorize) -> authorize
-				.anyExchange().authenticated()
-			)
-			.formLogin(withDefaults());
-		// @formatter:on
+				.authorizeExchange(authorize -> authorize
+						.pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+						.anyExchange().authenticated()
+				).httpBasic(withDefaults()).formLogin(withDefaults());
 		return http.build();
 	}
 
 	@Bean
 	MapReactiveUserDetailsService userDetailsService() {
-		// @formatter:off
 		UserDetails user = User.withDefaultPasswordEncoder()
 			.username("user")
 			.password("password")
 			.roles("USER")
 			.build();
-		// @formatter:on
 		return new MapReactiveUserDetailsService(user);
 	}
 

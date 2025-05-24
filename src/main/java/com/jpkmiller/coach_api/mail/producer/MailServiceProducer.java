@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class MailServiceProducer {
 
@@ -30,6 +32,7 @@ public class MailServiceProducer {
             String from = parser.getFrom();
             String subject = parser.getSubject();
             String content = parser.getPlainContent();
+            long receivedAt = receivedMessage.getReceivedDate().getTime();
 
             log.info("Email from: {}, Subject: {}", from, subject);
 
@@ -41,7 +44,9 @@ public class MailServiceProducer {
             var mail = new Mail(
                     from,
                     subject != null ? subject : "",
-                    content != null ? content : ""
+                    content != null ? content : "",
+                    UUID.randomUUID().toString(),
+                    receivedAt
             );
 
             kafkaTemplate.send("mail", mail)
