@@ -9,6 +9,6 @@ public class UniTuebingenProviderConfig extends MailProviderConfig {
     public UniTuebingenProviderConfig(
             @Value("${mail.uni-tuebingen.username}") String username,
             @Value("${mail.uni-tuebingen.password}") String password) {
-        super("mailserv.uni-tuebingen.de", "993", username, password);
+        super("mailserv.uni-tuebingen.de", "993", username, password, "UniTuebingen");
     }
 }

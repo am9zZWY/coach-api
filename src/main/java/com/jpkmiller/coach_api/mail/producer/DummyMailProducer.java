@@ -1,28 +1,25 @@
-package com.jpkmiller.coach_api.mail;
+package com.jpkmiller.coach_api.mail.producer;
 
 import com.jpkmiller.coach_api.core.Mail;
-import com.jpkmiller.coach_api.mail.imap.MailReceiverConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MailProducer {
+public class DummyMailProducer {
 
     @Autowired
     private KafkaTemplate<String, Mail> kafkaTemplate;
 
-    @Autowired
-    private MailReceiverConfiguration mailReceiverConfiguration;
-
-    // @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = 10000)
     public void sendMessage() {
-        System.out.println("Sending email...");
+        System.out.print("Sending email...");
         var mail = new Mail("josef.mueller@student.uni-tuebingen.de", "Test", "Hi");
         kafkaTemplate.send("mail", mail)
                 .whenComplete((result, ex) -> {
                     if (ex == null) {
-                        System.out.println("Message sent successfully");
+                        System.out.printf("DONE%n");
                     } else {
                         System.err.println("Failed to send message: " + ex.getMessage());
                     }
